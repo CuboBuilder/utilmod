@@ -1,4 +1,4 @@
-package example;
+package UtilMod;
 
 import arc.*;
 import arc.util.*;
@@ -10,11 +10,11 @@ import mindustry.mod.*;
 import mindustry.ui.dialogs.*;
 import mindustry.net.Administration.*;
 
-public class ExampleJavaMod extends Mod {
+public class Main extends Mod {
     private boolean teamSwitchActive = false;
     private Timer.Task teamSwitchTask;
 
-    public ExampleJavaMod() {
+    public Main() {
         Log.info("Loaded TeamSwitch Mod.");
 
         // Listen for chat messages
