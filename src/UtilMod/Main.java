@@ -15,8 +15,7 @@ public class Main extends Mod {
     private Timer.Task teamSwitchTask;
 
     public Main() {
-        Log.info("Loaded TeamSwitch Mod.");
-
+        Log.info("Loaded SomeUtilMOD.");
         // Listen for chat messages
         Events.on(PlayerChatEvent.class, event -> {
             String message = event.message.toLowerCase();
@@ -55,6 +54,6 @@ public class Main extends Mod {
 
     @Override
     public void loadContent() {
-        Log.info("TeamSwitch Mod loaded.");
+        Log.info("SomeUtilMOD loaded.");
     }
 }
