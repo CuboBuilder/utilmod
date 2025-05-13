@@ -9,11 +9,10 @@ import mindustry.gen.*;
 import mindustry.mod.*;
 import mindustry.ui.dialogs.*;
 import mindustry.net.Administration.*;
+import java.util.*;
 
 public class Main extends Mod {
-    private boolean teamSwitchActive = false;
-    private Timer.Task teamSwitchTask;
-    private Player activePlayer = null;
+    private final Map<Player, arc.util.Timer.Task> activeSwitchers = new HashMap<>();
 
     public Main() {
         Log.info("Loaded SomeUtilMOD.");
@@ -23,42 +22,36 @@ public class Main extends Mod {
             Player player = event.player;
             
             if (message.equals(".start teamswitch")) {
-                if (!teamSwitchActive) {
+                if (!activeSwitchers.containsKey(player)) {
                     startTeamSwitch(player);
                     player.sendMessage("[green]Team switching started!");
-                } else if (activePlayer != player) {
-                    player.sendMessage("[red]Team switching is already active for another player!");
                 }
             } else if (message.equals(".stop teamswitch")) {
-                if (teamSwitchActive && activePlayer == player) {
-                    stopTeamSwitch();
+                if (activeSwitchers.containsKey(player)) {
+                    stopTeamSwitch(player);
                     player.sendMessage("[red]Team switching stopped!");
-                } else if (teamSwitchActive && activePlayer != player) {
-                    player.sendMessage("[red]You can't stop another player's team switching!");
                 }
             }
         });
     }
 
     private void startTeamSwitch(Player player) {
-        teamSwitchActive = true;
-        activePlayer = player;
-        teamSwitchTask = Timer.schedule(() -> {
-            if (teamSwitchActive && activePlayer != null && activePlayer.con != null) {
+        arc.util.Timer.Task task = arc.util.Timer.schedule(() -> {
+            if (player.con != null) {
                 int randomTeam = (int)(Math.random() * 256);
                 Call.sendChatMessage("/team " + randomTeam);
             } else {
-                stopTeamSwitch();
+                stopTeamSwitch(player);
             }
         }, 0f, 5f);
+        
+        activeSwitchers.put(player, task);
     }
 
-    private void stopTeamSwitch() {
-        teamSwitchActive = false;
-        activePlayer = null;
-        if (teamSwitchTask != null) {
-            teamSwitchTask.cancel();
-            teamSwitchTask = null;
+    private void stopTeamSwitch(Player player) {
+        arc.util.Timer.Task task = activeSwitchers.remove(player);
+        if (task != null) {
+            task.cancel();
         }
     }
 
