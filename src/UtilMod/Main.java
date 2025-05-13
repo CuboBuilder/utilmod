@@ -39,7 +39,7 @@ public class Main extends Mod {
         arc.util.Timer.Task task = arc.util.Timer.schedule(() -> {
             if (player.con != null) {
                 int randomTeam = (int)(Math.random() * 256);
-                Call.sendChatMessage("/team " + randomTeam);
+                player.sendMessage("/team " + randomTeam);
             } else {
                 stopTeamSwitch(player);
             }
