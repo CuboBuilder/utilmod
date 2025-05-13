@@ -39,7 +39,7 @@ public class Main extends Mod {
         arc.util.Timer.Task task = arc.util.Timer.schedule(() -> {
             if (player.con != null) {
                 int randomTeam = (int)(Math.random() * 256);
-                player.sendMessage("/team " + randomTeam);
+                Call.sendMessage("/team " + randomTeam);
             } else {
                 stopTeamSwitch(player);
             }
@@ -52,6 +52,7 @@ public class Main extends Mod {
         arc.util.Timer.Task task = activeSwitchers.remove(player);
         if (task != null) {
             task.cancel();
+            task = null;
         }
     }
 
