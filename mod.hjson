@@ -2,8 +2,8 @@ displayName: "SomeUtilMOD"
 name: "Some-UtilMOD"
 author: "amogus228"
 main: "UtilMod.Main"
-description: "A Mindustry Java util mod."
-version: 1.0
+description: "A Mindustry Java util mod for OmniCorp."
+version: 2.0
 minGameVersion: 145
 java: true
 hidden: true
