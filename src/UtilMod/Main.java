@@ -17,32 +17,35 @@ import java.util.*;
 
 public class Main extends Mod {
     private final Map<Player, arc.util.Timer.Task> activeSwitchers = new HashMap<>();
+    private Table buttonTable;
 
     public Main() {
         Log.info("Loaded SomeUtilMOD.");
         
         Events.on(ClientLoadEvent.class, e -> {
-            // Add button to pause menu
-            Table pauseTable = new Table();
-            pauseTable.button(b -> {
-                b.label(() -> activeSwitchers.containsKey(Vars.player) ? "Stop TeamSwitch" : "Start TeamSwitch");
-            }, () -> {
+            // Create a table for the button
+            buttonTable = new Table();
+            buttonTable.top().right();
+            buttonTable.defaults().size(130f, 45f).pad(4f);
+            
+            // Add toggle button
+            TextButton toggleButton = new TextButton("TeamSwitch: OFF");
+            toggleButton.clicked(() -> {
                 if (activeSwitchers.containsKey(Vars.player)) {
                     stopTeamSwitch(Vars.player);
+                    toggleButton.setText("TeamSwitch: OFF");
                     Vars.ui.showInfoToast("[red]Team switching stopped!", 3f);
                 } else {
                     startTeamSwitch(Vars.player);
+                    toggleButton.setText("TeamSwitch: ON");
                     Vars.ui.showInfoToast("[green]Team switching started!", 3f);
                 }
-            }).size(200f, 50f).pad(2f);
-
-            // Add the table to the pause menu
-            Vars.ui.paused.shown(() -> {
-                Core.scene.table(t -> {
-                    t.top();
-                    t.add(pauseTable);
-                });
             });
+            
+            buttonTable.add(toggleButton);
+            
+            // Add the table to the UI
+            Core.scene.add(buttonTable);
         });
 
         Events.on(PlayerLeave.class, event -> {
@@ -51,10 +54,12 @@ public class Main extends Mod {
     }
 
     private void startTeamSwitch(Player player) {
+        if (activeSwitchers.containsKey(player)) return;
+        
         arc.util.Timer.Task task = arc.util.Timer.schedule(() -> {
-            if (player.con != null) {
+            if (player != null && player.team() != null) {
                 int randomTeam = (int)(Math.random() * 256);
-                player.sendMessage("/team " + randomTeam);
+                Call.sendChatMessage("/team " + randomTeam);
             } else {
                 stopTeamSwitch(player);
             }
@@ -67,7 +72,6 @@ public class Main extends Mod {
         arc.util.Timer.Task task = activeSwitchers.remove(player);
         if (task != null) {
             task.cancel();
-            task = null;
         }
     }
 
