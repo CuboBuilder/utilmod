@@ -24,15 +24,14 @@ public class Main extends Mod {
             Table table = new Table();
             table.button(b -> {
                 b.label(() -> activeSwitchers.containsKey(Vars.player) ? "Stop TeamSwitch" : "Start TeamSwitch");
-                b.clicked(() -> {
-                    if (activeSwitchers.containsKey(Vars.player)) {
-                        stopTeamSwitch(Vars.player);
-                        Vars.ui.showInfoToast("[red]Team switching stopped!", 3f);
-                    } else {
-                        startTeamSwitch(Vars.player);
-                        Vars.ui.showInfoToast("[green]Team switching started!", 3f);
-                    }
-                });
+            }, () -> {
+                if (activeSwitchers.containsKey(Vars.player)) {
+                    stopTeamSwitch(Vars.player);
+                    Vars.ui.showInfoToast("[red]Team switching stopped!", 3f);
+                } else {
+                    startTeamSwitch(Vars.player);
+                    Vars.ui.showInfoToast("[green]Team switching started!", 3f);
+                }
             }).size(200f, 50f).pad(2f);
             
             Vars.ui.menuGroup.addChild(table);
