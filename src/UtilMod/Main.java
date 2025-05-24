@@ -22,8 +22,9 @@ public class Main extends Mod {
         Log.info("Loaded SomeUtilMOD.");
         
         Events.on(ClientLoadEvent.class, e -> {
-            Table table = new Table();
-            table.button(b -> {
+            // Add button to pause menu
+            Table pauseTable = new Table();
+            pauseTable.button(b -> {
                 b.label(() -> activeSwitchers.containsKey(Vars.player) ? "Stop TeamSwitch" : "Start TeamSwitch");
             }, () -> {
                 if (activeSwitchers.containsKey(Vars.player)) {
@@ -34,9 +35,14 @@ public class Main extends Mod {
                     Vars.ui.showInfoToast("[green]Team switching started!", 3f);
                 }
             }).size(200f, 50f).pad(2f);
-            
-            Vars.ui.menuGroup.addChild(table);
-            table.setPosition(Vars.ui.menuGroup.getWidth() - 220f, 50f);
+
+            // Add the table to the pause menu
+            Vars.ui.paused.shown(() -> {
+                Core.scene.table(t -> {
+                    t.top();
+                    t.add(pauseTable);
+                });
+            });
         });
 
         Events.on(PlayerLeave.class, event -> {
