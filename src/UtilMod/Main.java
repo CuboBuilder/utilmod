@@ -19,6 +19,7 @@ public class Main extends Mod {
 
     public Main() {
         Log.info("Loaded SomeUtilMOD.");
+        
         Events.on(ClientLoadEvent.class, e -> {
             Table table = new Table();
             table.button(b -> {
@@ -32,7 +33,7 @@ public class Main extends Mod {
                         Vars.ui.showInfoToast("[green]Team switching started!", 3f);
                     }
                 });
-            }, new TextButtonStyle()).size(200f, 50f).pad(2f);
+            }).size(200f, 50f).pad(2f);
             
             Vars.ui.menuGroup.addChild(table);
             table.setPosition(Vars.ui.menuGroup.getWidth() - 220f, 50f);
